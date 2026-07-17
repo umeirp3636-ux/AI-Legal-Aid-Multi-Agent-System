@@ -1,0 +1,15 @@
+{
+  "name": "LexiGuard AI",
+  "description": "AI-powered Multi-Agent Legal Aid System built using IBM watsonx technologies.",
+  "repository": "https://github.com/yourusername/AI-Legal-Aid-Multi-Agent-System",
+  "keywords": [
+    "IBM",
+    "watsonx",
+    "LegalTech",
+    "AI",
+    "RAG",
+    "Multi-Agent"
+  ],
+  "website": "file:///C:/Users/Admin/Downloads/LexiGuard_AI.html",
+  "stack": "html"
+}
