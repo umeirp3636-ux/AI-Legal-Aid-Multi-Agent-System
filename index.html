@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LexiGuard AI | Multi-Agent Legal Assistant</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#eef4ff;
+color:#222;
+}
+
+header{
+background:#0b2341;
+padding:20px 8%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+color:white;
+position:sticky;
+top:0;
+}
+
+.logo{
+font-size:28px;
+font-weight:700;
+}
+
+nav a{
+text-decoration:none;
+color:white;
+margin-left:30px;
+font-weight:500;
+}
+
+.hero{
+padding:80px 8%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:60px;
+}
+
+.hero-text{
+width:55%;
+}
+
+.hero-text h1{
+font-size:50px;
+color:#0b2341;
+margin-bottom:20px;
+}
+
+.hero-text p{
+font-size:18px;
+line-height:1.7;
+margin-bottom:30px;
+}
+
+.btn{
+padding:15px 35px;
+background:#0056ff;
+color:white;
+border:none;
+border-radius:40px;
+font-size:16px;
+cursor:pointer;
+transition:.3s;
+}
+
+.btn:hover{
+background:#003fb5;
+}
+
+.hero img{
+width:420px;
+}
+
+section{
+padding:70px 8%;
+}
+
+.title{
+text-align:center;
+font-size:38px;
+margin-bottom:50px;
+color:#0b2341;
+}
+
+.features{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:30px;
+}
+
+.card{
+background:white;
+padding:30px;
+border-radius:18px;
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-8px);
+}
+
+.card h3{
+margin-bottom:15px;
+color:#0056ff;
+}
+
+.agent-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:25px;
+}
+
+.agent{
+background:white;
+padding:25px;
+border-radius:15px;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.agent h4{
+color:#0056ff;
+margin-bottom:12px;
+}
+
+.chat-section{
+display:flex;
+justify-content:center;
+}
+
+.chatbox{
+background:white;
+width:700px;
+border-radius:20px;
+box-shadow:0 15px 35px rgba(0,0,0,.1);
+overflow:hidden;
+}
+
+.chat-header{
+background:#0b2341;
+padding:20px;
+color:white;
+font-size:22px;
+font-weight:600;
+}
+
+.messages{
+height:350px;
+padding:20px;
+overflow:auto;
+background:#f8f9fc;
+}
+
+.bot{
+background:#dce9ff;
+padding:12px;
+border-radius:12px;
+margin-bottom:12px;
+width:80%;
+}
+
+.user{
+background:#0056ff;
+color:white;
+padding:12px;
+border-radius:12px;
+margin-left:auto;
+width:75%;
+margin-bottom:12px;
+}
+
+.input-area{
+display:flex;
+padding:20px;
+gap:10px;
+}
+
+.input-area input{
+flex:1;
+padding:15px;
+border-radius:30px;
+border:1px solid #ccc;
+outline:none;
+}
+
+.input-area button{
+padding:15px 28px;
+border:none;
+background:#0056ff;
+color:white;
+border-radius:30px;
+cursor:pointer;
+}
+
+.prompts{
+display:flex;
+flex-wrap:wrap;
+gap:15px;
+justify-content:center;
+margin-top:30px;
+}
+
+.prompt{
+background:white;
+padding:15px 22px;
+border-radius:30px;
+cursor:pointer;
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+transition:.3s;
+}
+
+.prompt:hover{
+background:#0056ff;
+color:white;
+}
+
+.upload{
+background:white;
+padding:40px;
+border-radius:20px;
+text-align:center;
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+.upload input{
+margin-top:20px;
+}
+
+.tech{
+display:flex;
+justify-content:center;
+gap:30px;
+flex-wrap:wrap;
+}
+
+.tech div{
+background:white;
+padding:25px;
+width:250px;
+text-align:center;
+border-radius:15px;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+footer{
+background:#0b2341;
+color:white;
+padding:30px;
+text-align:center;
+margin-top:60px;
+}
+
+@media(max-width:900px){
+
+.hero{
+flex-direction:column;
+text-align:center;
+}
+
+.hero-text{
+width:100%;
+}
+
+.hero img{
+width:300px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+<script>
+  window.wxOConfiguration = {
+    orchestrationID: "8f1b345308444f8f9a902619cc86db6a_da803167-6383-4003-8134-11b60631ab1f",
+    hostURL: "https://us-south.watson-orchestrate.cloud.ibm.com",
+    rootElementID: "root",
+    deploymentPlatform: "ibmcloud",
+    crn: "crn:v1:bluemix:public:watsonx-orchestrate:us-south:a/8f1b345308444f8f9a902619cc86db6a:da803167-6383-4003-8134-11b60631ab1f::",
+    chatOptions: {
+        agentId: "84104f09-0887-4426-b73d-9fee423b3bef", 
+    }
+  };
+  setTimeout(function () {
+    const script = document.createElement('script');
+    script.src = `${window.wxOConfiguration.hostURL}/wxochat/wxoLoader.js?embed=true`;
+    script.addEventListener('load', function () {
+        wxoLoader.init();
+    });
+    document.head.appendChild(script);
+  }, 0);                     
+</script>
+
+<header>
+
+<div class="logo">⚖️ LexiGuard AI</div>
+
+<nav>
+
+<a href="#">Home</a>
+<a href="#">Features</a>
+<a href="#">Agents</a>
+<a href="#">Chat</a>
+
+</nav>
+
+</header>
+
+<section class="hero">
+
+<div class="hero-text">
+
+<h1>AI Powered Multi-Agent Legal Assistant</h1>
+
+<p>
+
+Understand legal documents, review contracts, verify compliance,
+research case laws, and get legal explanations through an intelligent
+multi-agent AI assistant powered by IBM watsonx.
+
+</p>
+
+<button class="btn">Start Chat</button>
+
+</div>
+
+<img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=700" alt="">
+
+</section>
+
+<section>
+
+<h2 class="title">What LexiGuard AI Can Do</h2>
+
+<div class="features">
+
+<div class="card">
+<h3>📚 Legal Research</h3>
+<p>Retrieve laws, acts and court cases using Retrieval-Augmented Generation.</p>
+</div>
+
+<div class="card">
+<h3>📄 Contract Review</h3>
+<p>Highlight risky clauses, obligations and inconsistencies automatically.</p>
+</div>
+
+<div class="card">
+<h3>✔ Compliance Check</h3>
+<p>Verify documents against applicable legal regulations.</p>
+</div>
+
+<div class="card">
+<h3>💬 AI Legal Chat</h3>
+<p>Explain legal concepts in simple language with helpful guidance.</p>
+</div>
+
+</div>
+
+</section>
+
+<section>
+
+<h2 class="title">Specialized AI Agents</h2>
+
+<div class="agent-grid">
+
+<div class="agent">
+<h4>📄 Contract Reviewer</h4>
+<p>Analyzes agreements and flags risky clauses.</p>
+</div>
+
+<div class="agent">
+<h4>⚖ Compliance Agent</h4>
+<p>Checks legal compliance with regulations.</p>
+</div>
+
+<div class="agent">
+<h4>🔍 Legal Research Agent</h4>
+<p>Searches laws, precedents and judgments.</p>
+</div>
+
+<div class="agent">
+<h4>🤖 Q&A Agent</h4>
+<p>Answers legal questions using trusted knowledge.</p>
+</div>
+
+</div>
+
+</section>
+
+<section>
+
+<h2 class="title">Upload Legal Documents</h2>
+
+<div class="upload">
+
+<h3>Upload Contract, Notice or Policy</h3>
+
+<input type="file">
+
+</div>
+
+</section>
+
+<section>
+
+<h2 class="title">Quick Start Prompts</h2>
+
+<div class="prompts">
+
+<div class="prompt">📄 Review my contract.</div>
+
+<div class="prompt">⚖ Explain my legal rights.</div>
+
+<div class="prompt">🔍 Find related court cases.</div>
+
+</div>
+
+</section>
+
+<section class="chat-section">
+
+<div class="chatbox">
+
+<div class="chat-header">
+LexiGuard AI Assistant
+</div>
+
+<div class="messages" id="messages">
+
+<div class="bot">
+Hello 👋 I'm LexiGuard AI.
+
+Upload a legal document or ask me a legal question.
+
+</div>
+
+</div>
+
+<div class="input-area">
+
+<input id="msg" placeholder="Type your legal question...">
+
+<button onclick="sendMessage()">Send</button>
+
+</div>
+
+</div>
+
+</section>
+
+<section>
+
+<h2 class="title">Powered By</h2>
+
+<div class="tech">
+
+<div>
+
+<h3>IBM watsonx</h3>
+
+<p>Foundation AI Models</p>
+
+</div>
+
+<div>
+
+<h3>IBM Orchestrate</h3>
+
+<p>Multi-Agent Workflow</p>
+
+</div>
+
+<div>
+
+<h3>IBM Langflow</h3>
+
+<p>Visual AI Pipelines</p>
+
+</div>
+
+</div>
+
+</section>
+
+<footer>
+
+© 2026 LexiGuard AI | AI Legal Aid Multi-Agent System
+
+</footer>
+
+<script>
+
+function sendMessage(){
+
+var input=document.getElementById("msg");
+
+var text=input.value.trim();
+
+if(text==="") return;
+
+var chat=document.getElementById("messages");
+
+chat.innerHTML+=`<div class="user">${text}</div>`;
+
+setTimeout(()=>{
+
+chat.innerHTML+=`<div class="bot">
+Thank you for your question.<br><br>
+This is where your IBM watsonx Orchestrate chatbot response will appear.
+<br><br>
+⚠ This information is for educational purposes only and is not legal advice.
+</div>`;
+
+chat.scrollTop=chat.scrollHeight;
+
+},700);
+
+input.value="";
+
+}
+
+</script>
+
+</body>
+</html>
